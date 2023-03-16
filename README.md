@@ -29,5 +29,5 @@ The list of services used can be seen in the diagram below.
      alt='Figure 1: Completed data pipeline'
      width=1000px/>
      <br>
-     <em>Figure 1: A representation of the completed pipeline.</em>
+     <em>Figure 2: A representation of the completed pipeline.</em>
 </p>

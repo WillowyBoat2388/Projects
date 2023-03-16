@@ -19,3 +19,15 @@ In this project, I made use of Python and AWS to create an intelligent data scie
 <p align="center">
   <img src="https://github.com/Explore-AI/Pictures/blob/master/ezgif.com-gif-maker.gif?raw=true"/>
 </p>
+
+- ##  Batch Data Pipeline and Data Store Creation with AWS Data Pipeline & RDS
+In this project, I used AWS  data pipeline and RDS and a host of other AWS services to create a pipeline that took in data from csv files, transformed and processed them before loading them into an RDS database. AWS Lambda was then used to automate the entire process.
+The list of services used can be seen in the diagram below.
+
+<p align='center'>
+     <img src="figs/end-to-end-pipeline.jpg"
+     alt='Figure 1: Completed data pipeline'
+     width=1000px/>
+     <br>
+     <em>Figure 1: A representation of the completed pipeline.</em>
+</p>

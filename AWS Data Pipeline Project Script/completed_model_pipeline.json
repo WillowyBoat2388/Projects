@@ -1,0 +1,108 @@
+{
+    "objects": [
+      {
+        "failureAndRerunMode": "CASCADE",
+        "resourceRole": "DataPipelineDefaultResourceRole",
+        "role": "DataPipelineDefaultRole",
+        "pipelineLogUri": "s3://de-mbd-predict-onidajo-wale-olaitan-s3/Logs/",
+        "scheduleType": "ONDEMAND",
+        "name": "Default",
+        "id": "Default"
+      },
+      {
+        "dataFormat": {
+          "ref": "DataFormatId_oeSRW"
+        },
+        "filePath": "s3://de-mbd-predict-onidajo-wale-olaitan-s3/Output/historical_stock_data.csv",
+        "name": "S3Bucket",
+        "id": "S3DataNodeId_C7FCh",
+        "type": "S3DataNode"
+      },
+      {
+        "databaseName": "postgres",
+        "*password": "5WW1qFlWxhAs0T2UYJbO",
+        "name": "PostgresDatabase",
+        "id": "DatabaseId_ILGId",
+        "type": "RdsDatabase",
+        "rdsInstanceId": "de-mbd-predict-database",
+        "username": "postgres"
+      },
+      {
+        "role": "DataPipelineDefaultResourceRole",
+        "subject": "Onidajo_Wale-Olaitan_Pipeline_Failure",
+        "name": "SNS Failure Alert",
+        "id": "ActionId_WGqU2",
+        "type": "SnsAlarm",
+        "message": "Pipeline Failure",
+        "topicArn": "arn:aws:sns:eu-west-1:258124036060:de-mbd-predict-onidajo-wale-olaitan-SNS"
+      },
+      {
+        "name": "CSV",
+        "id": "DataFormatId_oeSRW",
+        "type": "CSV"
+      },
+      {
+        "output": {
+          "ref": "DataNodeId_7rYHg"
+        },
+        "input": {
+          "ref": "S3DataNodeId_C7FCh"
+        },
+        "dependsOn": {
+          "ref": "ShellCommandActivityId_O5Lps"
+        },
+        "name": "DefaultCopyActivity1",
+        "id": "CopyActivityId_VrsI7",
+        "runsOn": {
+          "ref": "ResourceId_NLJOz"
+        },
+        "type": "CopyActivity"
+      },
+      {
+        "role": "DataPipelineDefaultResourceRole",
+        "subject": "Onidajo_Wale-Olaitan_Pipeline_Success",
+        "name": "SNS Success Alert",
+        "id": "ActionId_NhI4X",
+        "type": "SnsAlarm",
+        "message": "Pipeline Success",
+        "topicArn": "arn:aws:sns:eu-west-1:258124036060:de-mbd-predict-onidajo-wale-olaitan-SNS"
+      },
+      {
+        "scriptUri": "s3://de-mbd-predict-onidajo-wale-olaitan-s3/Scripts/bash_executable.sh",
+        "name": "Data Processing",
+        "runsOn": {
+          "ref": "ResourceId_NLJOz"
+        },
+        "id": "ShellCommandActivityId_O5Lps",
+        "type": "ShellCommandActivity"
+      },
+      {
+        "resourceRole": "DataPipelineDefaultResourceRole",
+        "role": "DataPipelineDefaultRole",
+        "imageId": "ami-01a7d1154d8f0153b",
+        "securityGroupIds": "sg-04d61a6d86adbc3b8",
+        "instanceType": "t2.micro",
+        "name": "EC2Instance",
+        "id": "ResourceId_NLJOz",
+        "type": "Ec2Resource",
+        "terminateAfter": "1 Hour"
+      },
+      {
+        "database": {
+          "ref": "DatabaseId_ILGId"
+        },
+        "onFail": {
+          "ref": "ActionId_WGqU2"
+        },
+        "name": "SQLDataNode",
+        "insertQuery": "INSERT INTO public.historical_stocks_data\nVALUES (?,?,?,?,?,?,?,?,?);",
+        "id": "DataNodeId_7rYHg",
+        "type": "SqlDataNode",
+        "table": "historical_stocks_data",
+        "onSuccess": {
+          "ref": "ActionId_NhI4X"
+        }
+      }
+    ],
+    "parameters": []
+  }
